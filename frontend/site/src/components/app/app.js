@@ -22,9 +22,42 @@ class App extends Component {
 
     onDeleteDataItem = (id) => {
         const newData = this.state.data.filter((elem) => elem.id !== id);
-        this.setState(({ data }) => ({ 
-            data: newData
-         }));
+        this.setState(({ data }) => ({
+            data: newData,
+        }));
+    };
+
+    getItemId = () => {
+        const data = this.state.data;
+        let id = 0;
+        if (data.length !== 0) {
+            data.map((elem) => {
+                return (id = elem.id >= id ? elem.id + 1 : id);
+            });
+        }
+
+        return id;
+    };
+
+    onAddDataItem = (e) => {
+        e.preventDefault();
+        const elem = { id: this.getItemId() };
+        const newData = this.state.data;
+        const form = e.target.form;
+
+        const formData = new FormData(form);
+
+        for (const [key, value] of formData) {
+            elem[key] = value;
+        }
+
+        newData.push(elem);
+
+        this.setState(({ data }) => ({
+            data: newData,
+        }));
+
+        console.log(this.state.data);
     };
 
     render() {
@@ -41,7 +74,7 @@ class App extends Component {
                     data={this.state.data}
                     onDelete={this.onDeleteDataItem}
                 />
-                <EmployeesAddForm />
+                <EmployeesAddForm onAddEmployee={this.onAddDataItem} />
             </div>
         );
     }

@@ -8,17 +8,18 @@ class EmployeesAddForm extends Component {
         this.state = {
             name: '',
             salary: '',
-        }
+        };
     }
 
     onChangeValue = (e) => {
         this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
+            [e.target.name]: e.target.value,
+        });
+    };
 
     render() {
-        const {name, salary} = this.state;
+        const { name, salary } = this.state;
+        const { onAddEmployee } = this.props;
 
         return (
             <div className="app-add-form">
@@ -41,7 +42,11 @@ class EmployeesAddForm extends Component {
                         value={salary}
                     />
 
-                    <button type="submit" className="btn btn-outline-light">
+                    <button
+                        type="submit"
+                        className="btn btn-outline-light"
+                        onClick={(e) => {onAddEmployee(e)}}
+                    >
                         Добавить
                     </button>
                 </form>
