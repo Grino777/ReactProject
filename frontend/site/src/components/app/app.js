@@ -63,30 +63,15 @@ class App extends Component {
         });
     };
 
-    onToggleIncrease = (id) => {
-        const oldData = this.state.data;
-
-        this.setState({
-            data: oldData.map((item) => {
+    onToggleProp = (id, prop) => {
+        this.setState(({ data }) => ({
+            data: data.map((item) => {
                 if (item.id === id) {
-                    return { ...item, increase: !item.increase };
+                    return { ...item, [prop]: !item[prop] };
                 }
                 return item;
             }),
-        });
-    };
-
-    onToggleRaise = (id) => {
-        const oldData = this.state.data;
-
-        this.setState({
-            data: oldData.map((item) => {
-                if (item.id === id) {
-                    return { ...item, raise: !item.raise };
-                }
-                return item;
-            }),
-        });
+        }));
     };
 
     onDataLength = () => {
@@ -94,15 +79,15 @@ class App extends Component {
     };
 
     getReward = () => {
-        return this.state.data.filter(item => {
-            return item.increase === true
-        }).length
-    }
+        return this.state.data.filter((item) => {
+            return item.increase === true;
+        }).length;
+    };
 
     render() {
         return (
             <div className="app">
-                <AppInfo 
+                <AppInfo
                     onDataLength={this.onDataLength}
                     getReward={this.getReward}
                 />
@@ -115,8 +100,7 @@ class App extends Component {
                 <EmployeesList
                     data={this.state.data}
                     onDelete={this.onDeleteDataItem}
-                    onToggleIncrease={this.onToggleIncrease}
-                    onToggleRaise={this.onToggleRaise}
+                    onToggleProp={this.onToggleProp}
                 />
                 <EmployeesAddForm onAddEmployee={this.onAddDataItem} />
             </div>
