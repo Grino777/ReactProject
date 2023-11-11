@@ -13,11 +13,30 @@ class App extends Component {
         super(props);
         this.state = {
             data: [
-                { name: 'John C.', salary: 800, id: 1 },
-                { name: 'Alex M.', salary: 3000, id: 2 },
-                { name: 'Carl W.', salary: 5000, id: 3 },
+                {
+                    name: 'John C.',
+                    salary: 800,
+                    increase: false,
+                    rise: true,
+                    id: 1,
+                },
+                {
+                    name: 'Alex M.',
+                    salary: 3000,
+                    increase: true,
+                    rise: false,
+                    id: 2,
+                },
+                {
+                    name: 'Carl W.',
+                    salary: 5000,
+                    increase: false,
+                    rise: false,
+                    id: 3,
+                },
             ],
         };
+        this.maxId = this.state.data.length + 1;
     }
 
     onDeleteDataItem = (id) => {
@@ -27,43 +46,66 @@ class App extends Component {
         }));
     };
 
-    getItemId = () => {
-        const data = this.state.data;
-        let id = 0;
-        if (data.length !== 0) {
-            data.map((elem) => {
-                return (id = elem.id >= id ? elem.id + 1 : id);
-            });
-        }
+    onAddDataItem = (name, salary) => {
+        const newItem = {
+            name: name,
+            salary: salary,
+            increase: false,
+            rise: false,
+            id: this.maxId++,
+        };
 
-        return id;
+        this.setState(({ data }) => {
+            const newArr = [...data, newItem];
+            return {
+                data: newArr,
+            };
+        });
     };
 
-    onAddDataItem = (e) => {
-        e.preventDefault();
-        const elem = { id: this.getItemId() };
-        const newData = this.state.data;
-        const form = e.target.form;
+    onToggleIncrease = (id) => {
+        const oldData = this.state.data;
 
-        const formData = new FormData(form);
-
-        for (const [key, value] of formData) {
-            elem[key] = value;
-        }
-
-        newData.push(elem);
-
-        this.setState(({ data }) => ({
-            data: newData,
-        }));
-
-        console.log(this.state.data);
+        this.setState({
+            data: oldData.map((item) => {
+                if (item.id === id) {
+                    return { ...item, increase: !item.increase };
+                }
+                return item;
+            }),
+        });
     };
+
+    onToggleRaise = (id) => {
+        const oldData = this.state.data;
+
+        this.setState({
+            data: oldData.map((item) => {
+                if (item.id === id) {
+                    return { ...item, raise: !item.raise };
+                }
+                return item;
+            }),
+        });
+    };
+
+    onDataLength = () => {
+        return this.state.data.length;
+    };
+
+    getReward = () => {
+        return this.state.data.filter(item => {
+            return item.increase === true
+        }).length
+    }
 
     render() {
         return (
             <div className="app">
-                <AppInfo />
+                <AppInfo 
+                    onDataLength={this.onDataLength}
+                    getReward={this.getReward}
+                />
 
                 <div className="search-panel">
                     <SearchPanel />
@@ -73,6 +115,8 @@ class App extends Component {
                 <EmployeesList
                     data={this.state.data}
                     onDelete={this.onDeleteDataItem}
+                    onToggleIncrease={this.onToggleIncrease}
+                    onToggleRaise={this.onToggleRaise}
                 />
                 <EmployeesAddForm onAddEmployee={this.onAddDataItem} />
             </div>

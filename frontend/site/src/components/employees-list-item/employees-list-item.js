@@ -1,38 +1,13 @@
-import { Component } from 'react';
-
 import './employees-list-item.css';
-class EmployeesListItem extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            increase: false,
-            like: false,
-        };
-    }
 
-    setIncrease = () => {
-        this.setState(({ increase }) => ({
-            increase: !increase,
-        }));
-    };
-
-    setLike = () => {
-        this.setState(({ like }) => ({
-            like: !like,
-        }));
-    };
-
-    render() {
-        const { id, name, salary, onDelete } = this.props;
-        const { increase, like } = this.state;
-
-        let classNames = 'list-group-item d-flex justify-content-between';
+const EmployeesListItem = ({id, name, salary, increase, raise, onDelete, onToggleIncrease, onToggleRaise}) => {
+        let classNames = "list-group-item d-flex justify-content-between";
 
         if (increase) {
             classNames += ' increase';
         }
 
-        if (like) {
+        if (raise) {
             classNames += ' like';
         }
 
@@ -40,9 +15,7 @@ class EmployeesListItem extends Component {
             <li className={classNames}>
                 <span
                     className="list-group-item-label"
-                    onClick={() => {
-                        this.setLike(like);
-                    }}
+                    onClick={() => {onToggleRaise(id)}}
                 >
                     {name}
                 </span>
@@ -55,9 +28,7 @@ class EmployeesListItem extends Component {
                     <button
                         type="button"
                         className="btn-cookie btn-sm"
-                        onClick={() => {
-                            this.setIncrease(increase);
-                        }}
+                        onClick={() => {onToggleIncrease(id)}}
                     >
                         <i className="fas fa-cookie"> </i>
                     </button>
@@ -74,7 +45,6 @@ class EmployeesListItem extends Component {
                 </div>
             </li>
         );
-    }
 }
 
 export default EmployeesListItem;
