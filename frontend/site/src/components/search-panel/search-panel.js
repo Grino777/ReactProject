@@ -7,6 +7,7 @@ class SearchPanel extends Component {
         super(props);
         this.state = {
             temp: '',
+            filter: {},
         };
     }
 
